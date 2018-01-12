@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbm-nv-Rc0">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="jbm-nv-Rc0">
                                 <rect key="frame" x="20" y="176" width="335" height="335"/>
                                 <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -97,6 +97,9 @@
                                     <constraint firstItem="dJm-V7-R7O" firstAttribute="width" secondItem="dMf-RU-CR8" secondAttribute="width" id="zP9-qZ-u9n"/>
                                 </constraints>
                             </stackView>
+                            <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uUx-ig-gpm">
+                                <rect key="frame" x="0.0" y="106" width="375" height="70"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="0.61304045376712324" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -105,12 +108,15 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Qkh-Mf-KfA" secondAttribute="bottom" constant="20" id="FNI-Jn-pdu"/>
                             <constraint firstItem="jbm-nv-Rc0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="NbS-Da-8XB"/>
                             <constraint firstItem="sZX-4H-1KZ" firstAttribute="top" secondItem="jbm-nv-Rc0" secondAttribute="bottom" constant="10" id="PhT-vJ-zdo"/>
+                            <constraint firstItem="uUx-ig-gpm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Qg8-ct-FTK"/>
+                            <constraint firstItem="jbm-nv-Rc0" firstAttribute="top" secondItem="uUx-ig-gpm" secondAttribute="bottom" id="S8k-EO-mCu"/>
                             <constraint firstItem="sZX-4H-1KZ" firstAttribute="leading" secondItem="Qkh-Mf-KfA" secondAttribute="trailing" constant="10" id="Zy3-kA-5Sa"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="sZX-4H-1KZ" secondAttribute="bottom" constant="20" id="cXG-dL-Tqk"/>
                             <constraint firstItem="Qkh-Mf-KfA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="gbC-Nm-4F2"/>
                             <constraint firstItem="jbm-nv-Rc0" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="iuv-Cx-d0F"/>
                             <constraint firstItem="jbm-nv-Rc0" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="puN-x4-uwb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sZX-4H-1KZ" secondAttribute="trailing" constant="20" id="qsb-Cu-k9q"/>
+                            <constraint firstItem="uUx-ig-gpm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="sY6-Kg-oz1"/>
                             <constraint firstItem="Qkh-Mf-KfA" firstAttribute="top" secondItem="jbm-nv-Rc0" secondAttribute="bottom" constant="10" id="uQu-hr-hT3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -121,6 +127,7 @@
                         <outlet property="leftLabel" destination="gbC-Nm-4F2" id="hJO-Ko-lj1"/>
                         <outlet property="leftLabelAxis" destination="6rR-fl-vYD" id="aJd-kd-2Nn"/>
                         <outlet property="leftStack" destination="Qkh-Mf-KfA" id="BEr-c4-kmo"/>
+                        <outlet property="pickerStation" destination="uUx-ig-gpm" id="86b-0O-hos"/>
                         <outlet property="rightLabel" destination="qsb-Cu-k9q" id="bFo-Sc-9fT"/>
                         <outlet property="rightStack" destination="sZX-4H-1KZ" id="LxA-VX-oze"/>
                         <outlet property="verticalConstraint" destination="iuv-Cx-d0F" id="4cu-Tt-xQw"/>

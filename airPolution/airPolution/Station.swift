@@ -65,14 +65,12 @@ func getProvinces(stations: [Station]) -> [String] {
         guard let commune = city.commune else { continue }
         guard let province = commune.provinceName else { continue }
         let provinceCapitalizated = province.firstLetterCapitalization()
-        if !provinces.contains(provinceCapitalizated) {
-            provinces.insert(provinceCapitalizated)
-        }
+        provinces.insert(provinceCapitalizated)
     }
     return Array(provinces)
 }
 
-func getCities(stations: [Station], provinceName: String) -> [String] {
+func getStations(stations: [Station], provinceName: String) -> [String] {
     var cities: Set<String> = []
     for station in stations {
         guard let city = station.city else { continue }
@@ -80,9 +78,17 @@ func getCities(stations: [Station], provinceName: String) -> [String] {
         guard let province = commune.provinceName else { continue }
         let provinceCapitalizated = province.firstLetterCapitalization()
         if provinceName == provinceCapitalizated {
-            guard let name = city.name else { continue }
-            cities.insert(name)
+            guard let stationName = station.stationName else { continue }
+            cities.insert(stationName)
         }
     }
     return Array(cities)
+}
+
+func getStationByName(stations:[Station], stationName: String) -> Station? {
+    for station in stations {
+        guard let currentStation = station.stationName else { continue }
+        if currentStation == stationName { return station }
+    }
+    return nil
 }

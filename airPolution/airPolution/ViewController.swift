@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
     //MARK: Properties
     @IBOutlet weak var verticalConstraint: NSLayoutConstraint!
@@ -19,19 +19,27 @@ class ViewController: UIViewController {
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var leftStack: UIStackView!
     @IBOutlet weak var rightStack: UIStackView!
+    @IBOutlet weak var pickerStation: UIPickerView!
     
     var stations: [Station] = []
-    var firstLoad = true
+    var pickerOptions: [String] = []
+    var pickerValue = 0
+    var clickCount = 0
+    var stationData = pollutionData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         checkButton.layer.cornerRadius = 20
-        
         horizontalConstraint.constant -= view.bounds.height
-        leftLabel.constant += view.bounds.width
-        rightLabel.constant += view.bounds.width
+        leftLabel.constant -= view.bounds.width
+        rightLabel.constant -= view.bounds.width
         leftLabelAxis.constant = self.view.bounds.width * 0.5
+
+        pickerStation.isHidden = true
+        pickerStation.delegate = self
+        pickerStation.dataSource = self
+        
         leftStack.isHidden = true
         rightStack.isHidden = true
         getStations(completion: {newStations in
@@ -45,71 +53,150 @@ class ViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
+    
+    //MARK: Picker View
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerOptions[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerOptions.count
+    }
 
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[row], for: .normal)
+        self.pickerValue = row
+    }
+    
     //MARK: Actions
     @IBAction func checkPoluitonButton(_ sender: Any) {
-        let provinces = getProvinces(stations: self.stations).sorted()
-        print(getCities(stations: stations, provinceName: provinces[0]))
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
-            print(self.view.bounds.height)
-            self.horizontalConstraint.constant = -0.5 * self.checkButton.frame.size.width + 20
-            print(self.checkButton.backgroundColor!)
-            //setPolutionColor(polutionIndex: 2, colorObject: &self.checkButton.backgroundColor!)
-            if self.firstLoad {
-                self.leftStack.isHidden = false
-                self.rightStack.isHidden = false
-                self.leftLabel.constant -= self.view.bounds.width
-                self.rightLabel.constant -= self.view.bounds.width
-                self.view.layoutIfNeeded()
-                self.firstLoad = false
+        
+        switch self.clickCount {
+        case 0:
+            if self.stations.count == 0 {
+                let alert = UIAlertController(title: "Alert", message: "No stations loaded, try again", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                pickerOptions = getProvinces(stations: self.stations).sorted()
+                self.buttonToPickerMode(firstLabel: pickerOptions[0])
+                self.horizontalConstraint.constant += 50
             }
-        }, completion: { (finished:Bool) in
-            self.setPolutionColor(polutionIndex: 6)
-        })
+        case 1:
+            pickerOptions = getStations(stations: stations, provinceName: pickerOptions[self.pickerValue]).sorted()
+            self.pickerStation.reloadAllComponents()
+            self.clickCount += 1
+        default:
+            stationData.stationName = pickerOptions[pickerValue]
+            if let stationPicked = getStationByName(stations: stations, stationName: stationData.stationName) {
+                self.stationData.stationId = stationPicked.id
+                print("STATION DATA") // DEBUG
+                print(self.stationData) // DEBUG
+            }
+            guard let stationId = self.stationData.stationId else { setPolutionColor(polutionIndex: 404) ; return }
+            getSensors(stationId: stationId, completion: { (sensor) in
+                print(sensor)
+                print("XXX\n") //DEBUG
+            })
+            getPolutionIndex(stationId: stationId, completion: { (polution) in
+                print(polution)
+                print("YYY\n") // DEBUG
+            })
+            
+            getPolutionForStation(stationId: stationId, completion: { (polution) in
+                self.stationData.stPolutionIndex = polution
+            })
+            //Animation pasta
+            UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
+
+                self.horizontalConstraint.constant -= 50
+                self.horizontalConstraint.constant = -0.5 * self.checkButton.frame.size.width + 20
+                if self.clickCount < 3 {
+                    self.pickerStation.isHidden = true
+                    self.view.layoutIfNeeded()
+                }
+            }, completion: { (_:Bool) in
+                if self.clickCount < 3 {
+                    self.setPolutionColor(polutionIndex: self.stationData.stPolutionIndex)
+                    self.clickCount = 3
+                }
+            })
+            //End of animation
+        }
     }
     
     func setPolutionColor(polutionIndex: Int) {
-        var index = 1
+        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + polutionLevelLabels[self.stationData.stPolutionIndex]!, for: .normal)
+        if polutionIndex == 404 { self.checkButton.backgroundColor = polutionLevelColors[polutionIndex] ; return }
+        var index = 0
         var newColor = polutionLevelColors[index]
         UIView.animate(withDuration: 0.3, animations: {
             self.checkButton.backgroundColor = newColor
             self.view.backgroundColor = newColor!.withAlphaComponent(0.7)
         }, completion: {(Bool) -> Void in
-            if index == polutionIndex { return }
+            if index == polutionIndex { self.showPollutionLabels() ; return }
             index += 1 ; newColor = polutionLevelColors[index]
             UIView.animate(withDuration: 0.3, animations: {
                 self.checkButton.backgroundColor = newColor
                 self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                 }, completion: {(Bool) -> Void in
-                    if index == polutionIndex { return }
+                    if index == polutionIndex { self.showPollutionLabels() ; return }
                     index += 1 ; newColor = polutionLevelColors[index]
                     UIView.animate(withDuration: 0.3, animations: {
                         self.checkButton.backgroundColor = newColor
                         self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                     }, completion: {(Bool) -> Void in
-                        if index == polutionIndex { return }
+                        if index == polutionIndex { self.showPollutionLabels() ; return }
                         index += 1 ; newColor = polutionLevelColors[index]
                         UIView.animate(withDuration: 0.3, animations: {
                             self.checkButton.backgroundColor = newColor
                             self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                         }, completion: {(Bool) -> Void in
-                            if index == polutionIndex { return }
+                            if index == polutionIndex { self.showPollutionLabels() ; return }
                             index += 1 ; newColor = polutionLevelColors[index]
                             UIView.animate(withDuration: 0.3, animations: {
                                 self.checkButton.backgroundColor = newColor
                                 self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                                 }, completion: {(Bool) -> Void in
-                                    if index == polutionIndex { return }
+                                    if index == polutionIndex { self.showPollutionLabels() ; return }
                                     index += 1 ; newColor = polutionLevelColors[index]
                                     UIView.animate(withDuration: 0.3, animations: {
                                         self.checkButton.backgroundColor = newColor
                                         self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
-                                    }, completion: nil)
+                                    }, completion: { (Bool) ->Void in
+                                        self.showPollutionLabels() ; return
+                            })
                         })
                     })
                 })
             })
         })
+    }
+    
+    func showPollutionLabels() {
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
+            self.leftStack.isHidden = false
+            self.rightStack.isHidden = false
+            self.leftLabel.constant += self.view.bounds.width
+            self.rightLabel.constant += self.view.bounds.width
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        
+    }
+    
+    func buttonToPickerMode(firstLabel: String) {
+        self.checkButton.titleLabel?.textAlignment = NSTextAlignment.center
+        self.checkButton.titleLabel?.minimumScaleFactor = 0.1
+        self.checkButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        self.checkButton.setTitle("Check air pollution in \n" + firstLabel, for: .normal)
+        self.pickerStation.reloadAllComponents()
+        self.pickerStation.isHidden = false
+        self.clickCount += 1
     }
 }
 
