@@ -214,6 +214,18 @@
                                     <action selector="backButton:" destination="QfS-Dr-klN" eventType="touchUpInside" id="1Hf-bq-sHE"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkZ-Nd-PhF">
+                                <rect key="frame" x="20" y="558" width="335" height="36"/>
+                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Learn more">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButton:" destination="QfS-Dr-klN" eventType="touchUpInside" id="49J-CH-YTa"/>
+                                    <action selector="learnMore:" destination="QfS-Dr-klN" eventType="touchUpInside" id="YgX-pJ-46r"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -226,7 +238,10 @@
                             <constraint firstItem="wx5-Xg-eAQ" firstAttribute="width" secondItem="5Tx-7W-leX" secondAttribute="width" id="KIf-24-qy9"/>
                             <constraint firstItem="rhX-Kg-f8Q" firstAttribute="trailing" secondItem="wx5-Xg-eAQ" secondAttribute="trailing" constant="20" id="RPT-DH-6qG"/>
                             <constraint firstItem="rhX-Kg-f8Q" firstAttribute="trailing" secondItem="UpK-RI-vdJ" secondAttribute="trailing" constant="20" id="Uax-sj-iaT"/>
+                            <constraint firstItem="dkZ-Nd-PhF" firstAttribute="top" secondItem="vGz-O0-VAs" secondAttribute="bottom" constant="20" id="bPW-5M-nij"/>
                             <constraint firstItem="UpK-RI-vdJ" firstAttribute="top" secondItem="rhX-Kg-f8Q" secondAttribute="top" constant="20" id="ff8-r9-gS6"/>
+                            <constraint firstItem="dkZ-Nd-PhF" firstAttribute="leading" secondItem="rhX-Kg-f8Q" secondAttribute="leading" constant="20" id="iQf-A9-Vjm"/>
+                            <constraint firstItem="rhX-Kg-f8Q" firstAttribute="trailing" secondItem="dkZ-Nd-PhF" secondAttribute="trailing" constant="20" id="irY-oG-ZPO"/>
                             <constraint firstItem="vGz-O0-VAs" firstAttribute="leading" secondItem="rhX-Kg-f8Q" secondAttribute="leading" constant="20" id="mJd-K5-OZU"/>
                             <constraint firstItem="5Tx-7W-leX" firstAttribute="top" secondItem="UpK-RI-vdJ" secondAttribute="bottom" constant="20" id="mXJ-1r-lcu"/>
                             <constraint firstItem="vGz-O0-VAs" firstAttribute="top" secondItem="wx5-Xg-eAQ" secondAttribute="bottom" constant="30" id="odn-Cq-R7H"/>
@@ -237,6 +252,7 @@
                     </view>
                     <connections>
                         <outlet property="buttonOutlet" destination="vGz-O0-VAs" id="TPB-mI-d9d"/>
+                        <outlet property="learnMoreButton" destination="dkZ-Nd-PhF" id="TNi-sf-aZG"/>
                         <outlet property="mainLabel" destination="UpK-RI-vdJ" id="DWy-TE-0UW"/>
                         <outlet property="normLabel" destination="wx5-Xg-eAQ" id="ce2-4P-hhc"/>
                         <outlet property="valueLabel" destination="5Tx-7W-leX" id="KQZ-as-ADg"/>

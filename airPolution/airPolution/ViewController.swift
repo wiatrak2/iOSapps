@@ -158,6 +158,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if self.clickCount < 3 {
                 self.setpollutionColor(pollutionIndex: self.stationData.stpollutionIndex)
                 self.clickCount = 3
+                self.checkButton.isEnabled = false
             }
         })
     }
