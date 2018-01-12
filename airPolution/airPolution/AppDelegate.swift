@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  airPolution
+//  airpollution
 //
 //  Created by Wojciech Pratkowiecki on 10.01.2018.
 //  Copyright © 2018 Wojciech Pratkowiecki. All rights reserved.

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E8C20C72009468400B816B8 /* PolutionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8C20C62009468400B816B8 /* PolutionData.swift */; };
+		2E8C20C920094A5200B816B8 /* particulateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8C20C820094A5200B816B8 /* particulateViewController.swift */; };
 		2EC8367F2006ABC700FD44FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC8367E2006ABC700FD44FF /* AppDelegate.swift */; };
 		2EC836812006ABC700FD44FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC836802006ABC700FD44FF /* ViewController.swift */; };
 		2EC836842006ABC700FD44FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2EC836822006ABC700FD44FF /* Main.storyboard */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E8C20C62009468400B816B8 /* PolutionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolutionData.swift; sourceTree = "<group>"; };
+		2E8C20C820094A5200B816B8 /* particulateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = particulateViewController.swift; sourceTree = "<group>"; };
 		2EC8367B2006ABC700FD44FF /* airPolution.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = airPolution.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EC8367E2006ABC700FD44FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2EC836802006ABC700FD44FF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -64,10 +68,12 @@
 			children = (
 				2EC8367E2006ABC700FD44FF /* AppDelegate.swift */,
 				2EC836802006ABC700FD44FF /* ViewController.swift */,
+				2E8C20C820094A5200B816B8 /* particulateViewController.swift */,
 				2EC836942007D98B00FD44FF /* Station.swift */,
 				2EC836962007E4A800FD44FF /* Sensor.swift */,
 				2EC836922007A31D00FD44FF /* airPolution.swift */,
 				2EC836982008302600FD44FF /* Utils.swift */,
+				2E8C20C62009468400B816B8 /* PolutionData.swift */,
 				2EC836822006ABC700FD44FF /* Main.storyboard */,
 				2EC836852006ABC700FD44FF /* Assets.xcassets */,
 				2EC836872006ABC700FD44FF /* LaunchScreen.storyboard */,
@@ -149,11 +155,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EC836812006ABC700FD44FF /* ViewController.swift in Sources */,
+				2E8C20C72009468400B816B8 /* PolutionData.swift in Sources */,
 				2EC836972007E4A800FD44FF /* Sensor.swift in Sources */,
 				2EC8367F2006ABC700FD44FF /* AppDelegate.swift in Sources */,
 				2EC836952007D98B00FD44FF /* Station.swift in Sources */,
 				2EC836932007A31D00FD44FF /* airPolution.swift in Sources */,
 				2EC836992008302600FD44FF /* Utils.swift in Sources */,
+				2E8C20C920094A5200B816B8 /* particulateViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

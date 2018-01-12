@@ -1,6 +1,6 @@
 //
-//  airPolution.swift
-//  airPolution
+//  airpollution.swift
+//  airpollution
 //
 //  Created by Wojciech Pratkowiecki on 11.01.2018.
 //  Copyright © 2018 Wojciech Pratkowiecki. All rights reserved.
@@ -8,57 +8,57 @@
 
 import UIKit
 
-struct AirPolution : Decodable {
+struct Airpollution : Decodable {
     let key: String?
-    let values: [AirPolutionValues]?
+    let values: [AirpollutionValues]?
 }
 
-struct AirPolutionValues : Decodable {
+struct AirpollutionValues : Decodable {
     let date: String?
     let value: Double?
 }
 
-struct PolutionLevelIndex : Decodable {
+struct pollutionLevelIndex : Decodable {
     let id: Int?
     let stCalcDate: String?
-    let stIndexLevel: SinglePolutionIndex?
+    let stIndexLevel: SinglepollutionIndex?
     let stSourceDate: String?
     let so2CalcDate: String?
-    let so2IndexLevel: SinglePolutionIndex?
+    let so2IndexLevel: SinglepollutionIndex?
     let so2SourceDate: String?
     let no2CalcDate: String?
-    let no2IndexLevel: SinglePolutionIndex?
+    let no2IndexLevel: SinglepollutionIndex?
     let no2SourceDate: String?
     let coCalcDate: String?
-    let coIndexLevel: SinglePolutionIndex?
+    let coIndexLevel: SinglepollutionIndex?
     let coSourceDate: String?
     let pm10CalcDate: String?
-    let pm10IndexLevel: SinglePolutionIndex?
+    let pm10IndexLevel: SinglepollutionIndex?
     let pm10SourceDate: String?
     let pm25CalcDate: String?
-    let pm25IndexLevel: SinglePolutionIndex?
+    let pm25IndexLevel: SinglepollutionIndex?
     let pm25SourceDate: String?
     let o3CalcDate: String?
-    let o3IndexLevel: SinglePolutionIndex?
+    let o3IndexLevel: SinglepollutionIndex?
     let o3SourceDate: String?
     let c6h6CalcDate: String?
-    let c6h6IndexLevel: SinglePolutionIndex?
+    let c6h6IndexLevel: SinglepollutionIndex?
     let c6h6SourceDate: String?
 }
 
-struct SinglePolutionIndex : Decodable {
+struct SinglepollutionIndex : Decodable {
     let id: Int?
     let indexLevelName: String?
 }
 
-func getPolution(sensorId: Int, completion: @escaping (AirPolution)->())  {
+func getpollution(sensorId: Int, completion: @escaping (Airpollution)->())  {
     let dataUrl = "http://api.gios.gov.pl/pjp-api/rest/data/getData/" + String(sensorId)
     guard let url = URL(string: dataUrl) else { return }
     URLSession.shared.dataTask(with: url) { (data, response, err) in
         guard let data = data else { return }
         do {
-            let polutionData = try JSONDecoder().decode(AirPolution.self, from: data)
-            completion(polutionData)
+            let pollutionData = try JSONDecoder().decode(Airpollution.self, from: data)
+            completion(pollutionData)
         } catch let jsonErr {
             print(jsonErr)
             return
@@ -66,14 +66,14 @@ func getPolution(sensorId: Int, completion: @escaping (AirPolution)->())  {
     }.resume()
 }
 
-func getPolutionIndex(stationId: Int, completion: @escaping (PolutionLevelIndex)->())  {
+func getpollutionIndex(stationId: Int, completion: @escaping (pollutionLevelIndex)->())  {
     let indexUrl = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/" + String(stationId)
     guard let url = URL(string: indexUrl) else { return }
         URLSession.shared.dataTask(with: url) { (data, response, err) in
         guard let data = data else { return }
         do {
-            let polutionIndex = try JSONDecoder().decode(PolutionLevelIndex?.self, from: data)
-            completion(polutionIndex!)
+            let pollutionIndex = try JSONDecoder().decode(pollutionLevelIndex?.self, from: data)
+            completion(pollutionIndex!)
         } catch let jsonErr {
             print(jsonErr)
             return
@@ -81,10 +81,10 @@ func getPolutionIndex(stationId: Int, completion: @escaping (PolutionLevelIndex)
     }.resume()
 }
 
-func getPolutionForStation(stationId: Int, completion: @escaping (Int)->()) {
-    getPolutionIndex(stationId: stationId, completion: { (polution) in
-        guard let stationLevel = polution.stIndexLevel else { return }
-        guard let polutionLevel = stationLevel.id else { return }
-        completion(polutionLevel)
+func getpollutionForStation(stationId: Int, completion: @escaping (Int)->()) {
+    getpollutionIndex(stationId: stationId, completion: { (pollution) in
+        guard let stationLevel = pollution.stIndexLevel else { return }
+        guard let pollutionLevel = stationLevel.id else { return }
+        completion(pollutionLevel)
     })
 }

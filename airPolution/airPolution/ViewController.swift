@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  airPolution
+//  airpollution
 //
 //  Created by Wojciech Pratkowiecki on 10.01.2018.
 //  Copyright © 2018 Wojciech Pratkowiecki. All rights reserved.
@@ -41,7 +41,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.isHidden = true
+        if dataFetchEnd { return }
         checkButton.layer.cornerRadius = 20
         horizontalConstraint.constant -= view.bounds.height
         leftLabel.constant -= view.bounds.width
@@ -61,6 +62,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        if dataFetchEnd { return }
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
             self.horizontalConstraint.constant += self.view.bounds.height
             self.view.layoutIfNeeded()
@@ -92,8 +94,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         switch self.clickCount {
         case 0:
             if self.stations.count == 0 {
-                let alert = UIAlertController(title: "Alert", message: "No stations loaded, try again", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
+                let alert = UIAlertController(title: "Alert", message: "Could not load stations, try again", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             } else {
                 pickerOptions = getProvinces(stations: self.stations).sorted()
@@ -102,7 +104,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         case 1:
             pickerOptions = getStations(stations: stations, provinceName: pickerOptions[self.pickerValue]).sorted()
-            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[0], for: .normal)
+            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[pickerValue], for: .normal)
             self.pickerStation.reloadAllComponents()
             self.clickCount += 1
         default:
@@ -112,24 +114,32 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
+    
+    @IBAction func pm25Button(_ sender: UIButton) {
+        let particVC = storyboard?.instantiateViewController(withIdentifier: "particulateViewController") as! particulateViewController
+        particVC.pollutionColor = sender.backgroundColor!
+        particVC.particulateLvl = self.stationData.pollutionParticulatesLabel[prettyToFormula(label: (sender.titleLabel?.text!)!)]!
+        particVC.particulateFormula = (sender.titleLabel?.text!)!
+        particVC.sensorId = self.stationData.getSensorIdByFormula(formula: prettyToFormula(label: (sender.titleLabel?.text!)!))
+        navigationController?.pushViewController(particVC, animated: true)
+    }
+    
     func fetchData() {
         if let stationPicked = getStationByName(stations: stations, stationName: stationData.stationName) {
             self.stationData.stationId = stationPicked.id
         }
-        guard let stationId = self.stationData.stationId else { setPolutionColor(polutionIndex: 404) ; return }
-        getPolutionForStation(stationId: stationId, completion: { (pollution) in
-            self.stationData.stPolutionIndex = pollution
+        guard let stationId = self.stationData.stationId else { setpollutionColor(pollutionIndex: 404) ; return }
+        getpollutionForStation(stationId: stationId, completion: { (pollution) in
+            self.stationData.stpollutionIndex = pollution
             getSensors(stationId: stationId, completion: { (sensors) in
                 self.stationData.sensors = sensors
                 self.stationData.getSensorsInfo()
-                getPolutionIndex(stationId: stationId, completion: { (pollution) in
+                getpollutionIndex(stationId: stationId, completion: { (pollution) in
                     self.stationData.pollutionParticulatesIndex = pollution
                     self.stationData.getPariculatesLabel()
                     self.dataFetchEnd = true
                     print("STATION DATA\n") // DEBUG
                     print(self.stationData)
-                    print("____")
-                    print(self.stationData.pollutionParticulatesLabel)
                 })
             })
         })
@@ -146,47 +156,47 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         }, completion: { (_:Bool) in
             if self.clickCount < 3 {
-                self.setPolutionColor(polutionIndex: self.stationData.stPolutionIndex)
+                self.setpollutionColor(pollutionIndex: self.stationData.stpollutionIndex)
                 self.clickCount = 3
             }
         })
     }
     
-    func setPolutionColor(polutionIndex: Int) {
-        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + polutionLevelLabels[polutionIndex]!, for: .normal)
-        if polutionIndex == 404 { self.checkButton.backgroundColor = polutionLevelColors[polutionIndex] ; return }
+    func setpollutionColor(pollutionIndex: Int) {
+        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + pollutionLevelLabels[pollutionIndex]!, for: .normal)
+        if pollutionIndex == 404 { self.checkButton.backgroundColor = pollutionLevelColors[pollutionIndex] ; return }
         var index = 0
-        var newColor = polutionLevelColors[index]
+        var newColor = pollutionLevelColors[index]
         UIView.animate(withDuration: 0.3, animations: {
             self.checkButton.backgroundColor = newColor
             self.view.backgroundColor = newColor!.withAlphaComponent(0.7)
         }, completion: {(Bool) -> Void in
-            if index == polutionIndex { self.showPollutionLabels() ; return }
-            index += 1 ; newColor = polutionLevelColors[index]
+            if index == pollutionIndex { self.showPollutionLabels() ; return }
+            index += 1 ; newColor = pollutionLevelColors[index]
             UIView.animate(withDuration: 0.3, animations: {
                 self.checkButton.backgroundColor = newColor
                 self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                 }, completion: {(Bool) -> Void in
-                    if index == polutionIndex { self.showPollutionLabels() ; return }
-                    index += 1 ; newColor = polutionLevelColors[index]
+                    if index == pollutionIndex { self.showPollutionLabels() ; return }
+                    index += 1 ; newColor = pollutionLevelColors[index]
                     UIView.animate(withDuration: 0.3, animations: {
                         self.checkButton.backgroundColor = newColor
                         self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                     }, completion: {(Bool) -> Void in
-                        if index == polutionIndex { self.showPollutionLabels() ; return }
-                        index += 1 ; newColor = polutionLevelColors[index]
+                        if index == pollutionIndex { self.showPollutionLabels() ; return }
+                        index += 1 ; newColor = pollutionLevelColors[index]
                         UIView.animate(withDuration: 0.3, animations: {
                             self.checkButton.backgroundColor = newColor
                             self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                         }, completion: {(Bool) -> Void in
-                            if index == polutionIndex { self.showPollutionLabels() ; return }
-                            index += 1 ; newColor = polutionLevelColors[index]
+                            if index == pollutionIndex { self.showPollutionLabels() ; return }
+                            index += 1 ; newColor = pollutionLevelColors[index]
                             UIView.animate(withDuration: 0.3, animations: {
                                 self.checkButton.backgroundColor = newColor
                                 self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
                                 }, completion: {(Bool) -> Void in
-                                    if index == polutionIndex { self.showPollutionLabels() ; return }
-                                    index += 1 ; newColor = polutionLevelColors[index]
+                                    if index == pollutionIndex { self.showPollutionLabels() ; return }
+                                    index += 1 ; newColor = pollutionLevelColors[index]
                                     UIView.animate(withDuration: 0.3, animations: {
                                         self.checkButton.backgroundColor = newColor
                                         self.view.backgroundColor = newColor?.withAlphaComponent(0.7)
@@ -220,23 +230,20 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let labelColors = self.stationData.pollutionParticulatesLabel
         UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
             for button in self.particulateButtons {
-                let particulateFormula = button.titleLabel?.text! ?? "404"
-                button.backgroundColor = polutionLevelColors[labelColors[particulateFormula]!]
+                let particulateFormula = prettyToFormula(label: (button.titleLabel?.text!)!)
+                button.backgroundColor = pollutionLevelColors[labelColors[particulateFormula]!]
             }
         }, completion: nil)
-        
     }
     
     func particulateButtonInit() {
         let backgroundColor = self.view.backgroundColor
         for button in particulateButtons {
+            button.setTitle(prettyPartic(label: (button.titleLabel?.text!)!), for: .normal)
             button.backgroundColor = backgroundColor
             button.titleLabel?.adjustsFontSizeToFitWidth = true
             button.layer.cornerRadius = 15
         }
-        
-        
     }
- 
 }
 

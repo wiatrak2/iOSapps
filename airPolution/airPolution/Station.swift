@@ -1,6 +1,6 @@
 //
 //  Station.swift
-//  airPolution
+//  airpollution
 //
 //  Created by Wojciech Pratkowiecki on 11.01.2018.
 //  Copyright © 2018 Wojciech Pratkowiecki. All rights reserved.
@@ -44,18 +44,6 @@ func getStations(completion: @escaping ([Station])->())  {
         }
     }.resume()
     
-}
-
-extension String  {
-    func firstLetterCapitalization() -> String {
-        let firstLetter = prefix(1).capitalized
-        let restOfString = dropFirst().lowercased()
-        return firstLetter + restOfString
-    }
-    
-    mutating func firstLetterCapitalization() {
-        self = self.firstLetterCapitalization()
-    }
 }
 
 func getProvinces(stations: [Station]) -> [String] {
