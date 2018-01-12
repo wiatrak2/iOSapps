@@ -25,7 +25,7 @@ struct pollutionData {
         self.sensors = []
         self.sensorInfo = []
         self.pollutionParticulatesIndex = nil
-        self.pollutionParticulatesLabel = [:]
+        self.pollutionParticulatesLabel = ["404":404]
     }
     
     mutating func getSensorsInfo()  {

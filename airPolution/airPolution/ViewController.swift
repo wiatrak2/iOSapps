@@ -22,6 +22,16 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var rightStack: UIStackView!
     @IBOutlet weak var pickerStation: UIPickerView!
     
+    //MARKL Properties - Particulates Buttons
+    @IBOutlet weak var PM25Button: UIButton!
+    @IBOutlet weak var O3Button: UIButton!
+    @IBOutlet weak var SO2Button: UIButton!
+    @IBOutlet weak var PM10Button: UIButton!
+    @IBOutlet weak var NO2Button: UIButton!
+    @IBOutlet weak var COButton: UIButton!
+    var particulateButtons: [UIButton] { return [PM25Button, PM10Button, O3Button, SO2Button, NO2Button, COButton] }
+    
+    
     var stations: [Station] = []
     var pickerOptions: [String] = []
     var pickerValue = 0
@@ -190,19 +200,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         })
     }
     
-
-    
-    func showPollutionLabels() {
-       // UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
-            self.leftStack.isHidden = false
-            self.leftLabel.constant += self.view.bounds.width
-            self.rightStack.isHidden = false
-            self.rightLabel.constant += self.view.bounds.width
-            self.view.layoutIfNeeded()
-        //}, completion: nil)
-        
-    }
-    
     func buttonToPickerMode(firstLabel: String) {
         self.checkButton.titleLabel?.textAlignment = NSTextAlignment.center
         self.checkButton.titleLabel?.minimumScaleFactor = 0.1
@@ -212,5 +209,34 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.pickerStation.isHidden = false
         self.clickCount += 1
     }
+    
+    func showPollutionLabels() {
+        self.particulateButtonInit()
+        self.leftStack.isHidden = false
+        self.leftLabel.constant += self.view.bounds.width
+        self.rightStack.isHidden = false
+        self.rightLabel.constant += self.view.bounds.width
+        self.view.layoutIfNeeded()
+        let labelColors = self.stationData.pollutionParticulatesLabel
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
+            for button in self.particulateButtons {
+                let particulateFormula = button.titleLabel?.text! ?? "404"
+                button.backgroundColor = polutionLevelColors[labelColors[particulateFormula]!]
+            }
+        }, completion: nil)
+        
+    }
+    
+    func particulateButtonInit() {
+        let backgroundColor = self.view.backgroundColor
+        for button in particulateButtons {
+            button.backgroundColor = backgroundColor
+            button.titleLabel?.adjustsFontSizeToFitWidth = true
+            button.layer.cornerRadius = 15
+        }
+        
+        
+    }
+ 
 }
 
