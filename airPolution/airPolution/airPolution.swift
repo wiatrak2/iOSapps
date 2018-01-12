@@ -81,3 +81,11 @@ func getPolutionIndex(stationId: Int, completion: @escaping (PolutionLevelIndex)
         }
     }.resume()
 }
+
+func getPolutionForStation(stationId: Int, completion: @escaping (Int)->()) {
+    getPolutionIndex(stationId: stationId, completion: { (polution) in
+        guard let stationLevel = polution.stIndexLevel else { return }
+        guard let polutionLevel = stationLevel.id else { return }
+        completion(polutionLevel)
+    })
+}

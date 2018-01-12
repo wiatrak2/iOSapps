@@ -12,17 +12,20 @@ struct pollutionData {
     var stationName: String
     var stationId: Int?
     var stPolutionIndex: Int
+    var sensors: [Sensor]
     
     init() {
         self.stationName = "NO DATA"
         self.stationId = nil
         self.stPolutionIndex = 404
+        self.sensors = []
     }
     
-    init(stationName: String, stationId: Int, stPolutionIndex: Int) {
+    init(stationName: String, stationId: Int, stPolutionIndex: Int, sensors: [Sensor]) {
         self.stationName = stationName
         self.stationId = stationId
         self.stPolutionIndex = stPolutionIndex
+        self.sensors = sensors
     }
 }
 
@@ -45,14 +48,5 @@ let polutionLevelLabels: [Int:String] = [
     5: "Hazardous",
     404: "No Data"
 ]
-
-func getPolutionForStation(stationId: Int, completion: @escaping (Int)->()) {
-    getPolutionIndex(stationId: stationId, completion: { (polution) in
-        guard let stationLevel = polution.stIndexLevel else { return }
-        guard let polutionLevel = stationLevel.id else { return }
-        completion(polutionLevel)
-    })
-}
-
 
 

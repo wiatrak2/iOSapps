@@ -16,6 +16,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var leftLabel: NSLayoutConstraint!
     @IBOutlet weak var rightLabel: NSLayoutConstraint!
     @IBOutlet weak var leftLabelAxis: NSLayoutConstraint!
+    @IBOutlet weak var rightLabelAxis: NSLayoutConstraint!
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var leftStack: UIStackView!
     @IBOutlet weak var rightStack: UIStackView!
@@ -34,7 +35,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         horizontalConstraint.constant -= view.bounds.height
         leftLabel.constant -= view.bounds.width
         rightLabel.constant -= view.bounds.width
-        leftLabelAxis.constant = self.view.bounds.width * 0.5
+        leftLabelAxis.constant = self.view.bounds.width * 0.5 + 3
+        rightLabelAxis.constant = self.view.bounds.width * 0.5 + 3
 
         pickerStation.isHidden = true
         pickerStation.delegate = self
@@ -89,19 +91,23 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         case 1:
             pickerOptions = getStations(stations: stations, provinceName: pickerOptions[self.pickerValue]).sorted()
+            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[0], for: .normal)
             self.pickerStation.reloadAllComponents()
             self.clickCount += 1
         default:
             stationData.stationName = pickerOptions[pickerValue]
             if let stationPicked = getStationByName(stations: stations, stationName: stationData.stationName) {
                 self.stationData.stationId = stationPicked.id
-                print("STATION DATA") // DEBUG
-                print(self.stationData) // DEBUG
             }
             guard let stationId = self.stationData.stationId else { setPolutionColor(polutionIndex: 404) ; return }
-            getSensors(stationId: stationId, completion: { (sensor) in
-                print(sensor)
-                print("XXX\n") //DEBUG
+            getSensors(stationId: stationId, completion: { (sensors) in
+                self.stationData.sensors = sensors
+                print(self.stationData) //DEBUG
+                print("STATION DATA\n")
+                for sensor in self.stationData.sensors {
+                    guard let param = sensor.param else { continue }
+                    print(param.paramName)
+                }
             })
             getPolutionIndex(stationId: stationId, completion: { (polution) in
                 print(polution)
@@ -179,13 +185,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func showPollutionLabels() {
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
+       // UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
             self.leftStack.isHidden = false
-            self.rightStack.isHidden = false
             self.leftLabel.constant += self.view.bounds.width
+            self.rightStack.isHidden = false
             self.rightLabel.constant += self.view.bounds.width
             self.view.layoutIfNeeded()
-        }, completion: nil)
+        //}, completion: nil)
         
     }
     
