@@ -27,6 +27,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var pickerValue = 0
     var clickCount = 0
     var stationData = pollutionData()
+    var dataFetchEnd = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,49 +96,54 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.pickerStation.reloadAllComponents()
             self.clickCount += 1
         default:
-            stationData.stationName = pickerOptions[pickerValue]
-            if let stationPicked = getStationByName(stations: stations, stationName: stationData.stationName) {
-                self.stationData.stationId = stationPicked.id
-            }
-            guard let stationId = self.stationData.stationId else { setPolutionColor(polutionIndex: 404) ; return }
-            getSensors(stationId: stationId, completion: { (sensors) in
-                self.stationData.sensors = sensors
-                print(self.stationData) //DEBUG
-                print("STATION DATA\n")
-                for sensor in self.stationData.sensors {
-                    guard let param = sensor.param else { continue }
-                    print(param.paramName)
-                }
-            })
-            getPolutionIndex(stationId: stationId, completion: { (polution) in
-                print(polution)
-                print("YYY\n") // DEBUG
-            })
-            
-            getPolutionForStation(stationId: stationId, completion: { (polution) in
-                self.stationData.stPolutionIndex = polution
-            })
-            //Animation pasta
-            UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
-
-                self.horizontalConstraint.constant -= 50
-                self.horizontalConstraint.constant = -0.5 * self.checkButton.frame.size.width + 20
-                if self.clickCount < 3 {
-                    self.pickerStation.isHidden = true
-                    self.view.layoutIfNeeded()
-                }
-            }, completion: { (_:Bool) in
-                if self.clickCount < 3 {
-                    self.setPolutionColor(polutionIndex: self.stationData.stPolutionIndex)
-                    self.clickCount = 3
-                }
-            })
-            //End of animation
+            self.stationData.stationName = pickerOptions[pickerValue]
+            self.fetchData()
+            self.buttonUpAnimation()
         }
     }
     
+    func fetchData() {
+        if let stationPicked = getStationByName(stations: stations, stationName: stationData.stationName) {
+            self.stationData.stationId = stationPicked.id
+        }
+        guard let stationId = self.stationData.stationId else { setPolutionColor(polutionIndex: 404) ; return }
+        getPolutionForStation(stationId: stationId, completion: { (pollution) in
+            self.stationData.stPolutionIndex = pollution
+            getSensors(stationId: stationId, completion: { (sensors) in
+                self.stationData.sensors = sensors
+                self.stationData.getSensorsInfo()
+                getPolutionIndex(stationId: stationId, completion: { (pollution) in
+                    self.stationData.pollutionParticulatesIndex = pollution
+                    self.stationData.getPariculatesLabel()
+                    self.dataFetchEnd = true
+                    print("STATION DATA\n") // DEBUG
+                    print(self.stationData)
+                    print("____")
+                    print(self.stationData.pollutionParticulatesLabel)
+                })
+            })
+        })
+    }
+        
+    func buttonUpAnimation() {
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
+            
+            self.horizontalConstraint.constant -= 50
+            self.horizontalConstraint.constant = -0.5 * self.checkButton.frame.size.width + 20
+            if self.clickCount < 3 {
+                self.pickerStation.isHidden = true
+                self.view.layoutIfNeeded()
+            }
+        }, completion: { (_:Bool) in
+            if self.clickCount < 3 {
+                self.setPolutionColor(polutionIndex: self.stationData.stPolutionIndex)
+                self.clickCount = 3
+            }
+        })
+    }
+    
     func setPolutionColor(polutionIndex: Int) {
-        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + polutionLevelLabels[self.stationData.stPolutionIndex]!, for: .normal)
+        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + polutionLevelLabels[polutionIndex]!, for: .normal)
         if polutionIndex == 404 { self.checkButton.backgroundColor = polutionLevelColors[polutionIndex] ; return }
         var index = 0
         var newColor = polutionLevelColors[index]
@@ -183,6 +189,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             })
         })
     }
+    
+
     
     func showPollutionLabels() {
        // UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {

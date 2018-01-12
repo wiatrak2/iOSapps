@@ -51,14 +51,13 @@ struct SinglePolutionIndex : Decodable {
     let indexLevelName: String?
 }
 
-func getPolution(sensorId: Int, completion: @escaping ([AirPolution])->())  {
+func getPolution(sensorId: Int, completion: @escaping (AirPolution)->())  {
     let dataUrl = "http://api.gios.gov.pl/pjp-api/rest/data/getData/" + String(sensorId)
     guard let url = URL(string: dataUrl) else { return }
-    var polutionData: [AirPolution] = []
     URLSession.shared.dataTask(with: url) { (data, response, err) in
         guard let data = data else { return }
         do {
-            polutionData = try JSONDecoder().decode([AirPolution].self, from: data)
+            let polutionData = try JSONDecoder().decode(AirPolution.self, from: data)
             completion(polutionData)
         } catch let jsonErr {
             print(jsonErr)
