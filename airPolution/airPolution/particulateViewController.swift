@@ -26,7 +26,7 @@ class particulateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = pollutionColor.withAlphaComponent(0.7)
+        self.view.backgroundColor = pollutionColor
         self.initLabels()
         self.mainLabel.text = self.particulateFormula + "\npollution level:\n" + pollutionLevelLabels[particulateLvl]!
         let pollutionNorm = norms[prettyToFormula(label: self.particulateFormula)]!
@@ -37,7 +37,7 @@ class particulateViewController: UIViewController {
                 for value in values {
                     if let v = value.value {
                         DispatchQueue.main.async(execute: {
-                            self.valueLabel.text = self.particulateFormula + " pollution value:\n" + String(v)
+                            self.valueLabel.text = self.particulateFormula + " pollution value:\n" + String(format:"%.2f",v)
                         })
                         break
                     }
@@ -67,6 +67,8 @@ class particulateViewController: UIViewController {
             label.backgroundColor = pollutionColor
             label.layer.masksToBounds = true
             label.layer.cornerRadius = 20
+            label.layer.borderWidth = 2
+            label.layer.borderColor = UIColor.white.cgColor
         }
     }
 }

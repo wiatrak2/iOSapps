@@ -25,11 +25,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     //MARKL Properties - Particulates Buttons
     @IBOutlet weak var PM25Button: UIButton!
     @IBOutlet weak var O3Button: UIButton!
-    @IBOutlet weak var SO2Button: UIButton!
     @IBOutlet weak var PM10Button: UIButton!
     @IBOutlet weak var NO2Button: UIButton!
-    @IBOutlet weak var COButton: UIButton!
-    var particulateButtons: [UIButton] { return [PM25Button, PM10Button, O3Button, SO2Button, NO2Button, COButton] }
+    @IBOutlet weak var SO2Button: UIButton!
+    var particulateButtons: [UIButton] { return [PM25Button, PM10Button, O3Button, NO2Button, SO2Button] }
+    @IBOutlet weak var BackButtonOutlet: UIButton!
     
     
     var stations: [Station] = []
@@ -44,6 +44,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.navigationController?.navigationBar.isHidden = true
         if dataFetchEnd { return }
         checkButton.layer.cornerRadius = 20
+        checkButton.layer.borderWidth = 5
+        checkButton.layer.borderColor = UIColor.white.cgColor
         horizontalConstraint.constant -= view.bounds.height
         leftLabel.constant -= view.bounds.width
         rightLabel.constant -= view.bounds.width
@@ -114,8 +116,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    
-    @IBAction func pm25Button(_ sender: UIButton) {
+    @IBAction func particButton(_ sender: UIButton) {
         let particVC = storyboard?.instantiateViewController(withIdentifier: "particulateViewController") as! particulateViewController
         particVC.pollutionColor = sender.backgroundColor!
         particVC.particulateLvl = self.stationData.pollutionParticulatesLabel[prettyToFormula(label: (sender.titleLabel?.text!)!)]!
@@ -123,6 +124,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         particVC.sensorId = self.stationData.getSensorIdByFormula(formula: prettyToFormula(label: (sender.titleLabel?.text!)!))
         navigationController?.pushViewController(particVC, animated: true)
     }
+    
+    
+    @IBAction func backToStart(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    //MARK: Methods
     
     func fetchData() {
         if let stationPicked = getStationByName(stations: stations, stationName: stationData.stationName) {
@@ -138,8 +146,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     self.stationData.pollutionParticulatesIndex = pollution
                     self.stationData.getPariculatesLabel()
                     self.dataFetchEnd = true
-                    print("STATION DATA\n") // DEBUG
-                    print(self.stationData)
                 })
             })
         })
@@ -164,8 +170,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func setpollutionColor(pollutionIndex: Int) {
-        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + pollutionLevelLabels[pollutionIndex]!, for: .normal)
-        if pollutionIndex == 404 { self.checkButton.backgroundColor = pollutionLevelColors[pollutionIndex] ; return }
+        if pollutionIndex == 404 { self.checkButton.backgroundColor = pollutionLevelColors[pollutionIndex] ; backButtonInit() ; return }
         var index = 0
         var newColor = pollutionLevelColors[index]
         UIView.animate(withDuration: 0.3, animations: {
@@ -222,7 +227,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func showPollutionLabels() {
+        self.backButtonInit()
         self.particulateButtonInit()
+        self.checkButton.layer.borderWidth = 0
+        self.checkButton.setTitle("Air quality in\n " +  stationData.stationName + ":\n" + pollutionLevelLabels[self.stationData.stpollutionIndex]!, for: .normal)
         self.leftStack.isHidden = false
         self.leftLabel.constant += self.view.bounds.width
         self.rightStack.isHidden = false
@@ -245,6 +253,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             button.titleLabel?.adjustsFontSizeToFitWidth = true
             button.layer.cornerRadius = 15
         }
+    }
+    
+    func backButtonInit() {
+        self.BackButtonOutlet.setTitle("\u{21e6}BACK", for: .normal)
+        self.BackButtonOutlet.backgroundColor = self.view.backgroundColor
+        self.BackButtonOutlet.layer.borderWidth = 5
+        self.BackButtonOutlet.layer.borderColor = self.checkButton.backgroundColor?.cgColor
+        self.BackButtonOutlet.layer.cornerRadius = 15
+        self.BackButtonOutlet.titleLabel?.adjustsFontSizeToFitWidth = true
     }
 }
 

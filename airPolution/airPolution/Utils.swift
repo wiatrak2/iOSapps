@@ -10,12 +10,12 @@ import UIKit
 
 let pollutionLevelColors: [Int:UIColor] = [
     0: UIColor(red: 0.4, green: 0.95, blue: 0.2, alpha: 1.0),
-    1: UIColor(red: 0.5, green: 0.85, blue: 0.3, alpha: 1.0),
-    2: UIColor(red: 0.7, green: 0.6, blue: 0.3, alpha: 1.0),
-    3: UIColor(red: 0.75, green: 0.3, blue: 0.3, alpha: 1.0),
-    4: UIColor(red: 0.9, green: 0.2, blue: 0.2, alpha: 1.0),
-    5: UIColor(red: 0.4, green: 0.0, blue: 0.0, alpha: 1.0),
-    404: UIColor(red:0.63, green: 0.63, blue: 0.63, alpha: 0.63)
+    1: UIColor(red: 0.7, green: 0.9, blue: 0.3, alpha: 1.0),
+    2: UIColor(red: 0.95, green: 0.95, blue: 0.15, alpha: 1.0),
+    3: UIColor(red: 0.95, green: 0.65, blue: 0.15, alpha: 1.0),
+    4: UIColor(red: 0.95, green: 0.2, blue: 0.15, alpha: 1.0),
+    5: UIColor(red: 0.35, green: 0.1, blue: 0.1, alpha: 1.0),
+    404: UIColor(red:0.63, green: 0.63, blue: 0.63, alpha: 1.0)
 ]
 
 let pollutionLevelLabels: [Int:String] = [
