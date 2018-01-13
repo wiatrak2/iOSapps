@@ -16,12 +16,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
         buttonLabel.layer.borderWidth = 2
         buttonLabel.layer.borderColor = UIColor.white.cgColor
         placeTextField.delegate = self
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = false
+    }
     
     //MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -44,7 +51,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func showPlacesButton(_ sender: UIButton) {
-        print("showPlaces button clicked")
     }
 }
 

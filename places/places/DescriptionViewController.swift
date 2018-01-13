@@ -26,6 +26,7 @@ class DescriptionViewController: UIViewController, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         places[placeIndex].placeDescription = descriptionField.text
         descriptionField.resignFirstResponder()
+        savePlaces()
     }
 
     /*

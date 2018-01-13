@@ -51,8 +51,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     
     //MARK: Utils
-    func photoSource()
-    {
+    func photoSource() {
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         optionMenu.popoverPresentationController?.sourceView = self.view
         
@@ -71,8 +70,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
 
     }
         
-        func openCamera()
-        {
+        func openCamera() {
             if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
             {
                 imagePickerController = UIImagePickerController()
@@ -104,13 +102,13 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
                 fatalError("Unable to create place")
         }
         places.append(newPlace)
+        savePlaces()
     }
     
     @IBAction func selectImageFromLib(_ sender: UITapGestureRecognizer) {
         placeDescription.resignFirstResponder()
         self.photoSource()
     }
-    
     /*
     // MARK: - Navigation
 

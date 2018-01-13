@@ -18,7 +18,6 @@
 		2E91B1092001427A0022AEF7 /* PlacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E91B1082001427A0022AEF7 /* PlacesTableViewController.swift */; };
 		2E91B10B200142FD0022AEF7 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E91B10A200142FD0022AEF7 /* Place.swift */; };
 		2ECF8A6820017AD60009D129 /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF8A6720017AD60009D129 /* DescriptionViewController.swift */; };
-		2ECF8A6A200184DF0009D129 /* EditDescViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF8A69200184DF0009D129 /* EditDescViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +34,6 @@
 		2E91B1082001427A0022AEF7 /* PlacesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewController.swift; sourceTree = "<group>"; };
 		2E91B10A200142FD0022AEF7 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		2ECF8A6720017AD60009D129 /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
-		2ECF8A69200184DF0009D129 /* EditDescViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDescViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +74,6 @@
 				2E91B10620013F5A0022AEF7 /* PlacesTableViewCell.swift */,
 				2E91B1082001427A0022AEF7 /* PlacesTableViewController.swift */,
 				2ECF8A6720017AD60009D129 /* DescriptionViewController.swift */,
-				2ECF8A69200184DF0009D129 /* EditDescViewController.swift */,
 				2E91B0F22000262F0022AEF7 /* Main.storyboard */,
 				2E91B0F52000262F0022AEF7 /* Assets.xcassets */,
 				2E91B0F72000262F0022AEF7 /* LaunchScreen.storyboard */,
@@ -157,7 +154,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2ECF8A6A200184DF0009D129 /* EditDescViewController.swift in Sources */,
 				2E91B0F12000262F0022AEF7 /* ViewController.swift in Sources */,
 				2E91B1092001427A0022AEF7 /* PlacesTableViewController.swift in Sources */,
 				2E4FEB06200154090086F8A1 /* AddViewController.swift in Sources */,

@@ -90,37 +90,11 @@ class PlacesTableViewController: UITableViewController {
     }
     
     //MARK: Private Methods
-    
-    private func savePlaces()
-    {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(places, toFile: Place.ArchiveURL.path)
-        if isSuccessfulSave {
-            os_log("Places successfully saved.", log: OSLog.default, type: .debug)
-        } else {
-            os_log("Failed to save places", log: OSLog.default, type: .error)
-        }
-    }
-    
-    private func loadPlaces() -> [Place]?  {
+        
+    private func loadPlaces() -> [Place]? {
         return NSKeyedUnarchiver.unarchiveObject(withFile: Place.ArchiveURL.path) as? [Place]
     }
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 
 }
