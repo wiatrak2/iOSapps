@@ -115,7 +115,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.present(alert, animated: true, completion: nil)
         case 1:
             pickerOptions = getStations(stations: stations, provinceName: pickerOptions[self.pickerValue]).sorted()
-            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[min(pickerValue, pickerOptions.count - 1)], for: .normal)
+            self.pickerValue = min(pickerValue, pickerOptions.count - 1)
+            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[pickerValue], for: .normal)
             self.pickerStation.reloadAllComponents()
             self.clickCount += 1
         default:
