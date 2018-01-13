@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:airPolution.xcodeproj">
+      location = "self:/Users/Wojtek/Documents/iOS_Bootcamp/airPolution/airPollution.xcodeproj">
    </FileRef>
 </Workspace>
