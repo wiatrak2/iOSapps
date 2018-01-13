@@ -21,15 +21,16 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var leftStack: UIStackView!
     @IBOutlet weak var rightStack: UIStackView!
     @IBOutlet weak var pickerStation: UIPickerView!
+    @IBOutlet weak var BackButtonOutlet: UIButton!
     
-    //MARKL Properties - Particulates Buttons
+    //MARK: Properties - Particulates Buttons
     @IBOutlet weak var PM25Button: UIButton!
     @IBOutlet weak var O3Button: UIButton!
     @IBOutlet weak var PM10Button: UIButton!
     @IBOutlet weak var NO2Button: UIButton!
     @IBOutlet weak var SO2Button: UIButton!
     var particulateButtons: [UIButton] { return [PM25Button, PM10Button, O3Button, NO2Button, SO2Button] }
-    @IBOutlet weak var BackButtonOutlet: UIButton!
+    
     
     
     var stations: [Station] = []
@@ -68,9 +69,21 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
             self.horizontalConstraint.constant += self.view.bounds.height
             self.view.layoutIfNeeded()
-        }, completion: nil)
+        }, completion: { (Bool) -> Void in
+            if self.stations.count == 0 {
+                let alert = UIAlertController(title: "Alert", message: "Could not load stations, try again", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "BACK", style: UIAlertActionStyle.default, handler: { (_) in
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                self.pickerOptions = getProvinces(stations: self.stations).sorted()
+                self.buttonToPickerMode(firstLabel: self.pickerOptions[0])
+                self.horizontalConstraint.constant += 50
+            }
+        })
     }
-    
+        
     //MARK: Picker View
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -95,18 +108,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         switch self.clickCount {
         case 0:
-            if self.stations.count == 0 {
-                let alert = UIAlertController(title: "Alert", message: "Could not load stations, try again", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                pickerOptions = getProvinces(stations: self.stations).sorted()
-                self.buttonToPickerMode(firstLabel: pickerOptions[0])
-                self.horizontalConstraint.constant += 50
-            }
+            let alert = UIAlertController(title: "Alert", message: "Could not load stations, try again", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "BACK", style: UIAlertActionStyle.default, handler: { (_) in
+                self.navigationController?.popViewController(animated: true)
+            }))
+            self.present(alert, animated: true, completion: nil)
         case 1:
             pickerOptions = getStations(stations: stations, provinceName: pickerOptions[self.pickerValue]).sorted()
-            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[pickerValue], for: .normal)
+            self.checkButton.setTitle("Check air pollution in \n" + pickerOptions[min(pickerValue, pickerOptions.count - 1)], for: .normal)
             self.pickerStation.reloadAllComponents()
             self.clickCount += 1
         default:
@@ -215,6 +224,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             })
         })
     }
+    
+    //MARK: Outlets managing
     
     func buttonToPickerMode(firstLabel: String) {
         self.checkButton.titleLabel?.textAlignment = NSTextAlignment.center

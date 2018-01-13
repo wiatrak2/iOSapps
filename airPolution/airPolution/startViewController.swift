@@ -10,8 +10,10 @@ import UIKit
 
 class startViewController: UIViewController {
 
+    //MARK: Properties
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var horizontalConstraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
@@ -29,8 +31,9 @@ class startViewController: UIViewController {
         }, completion: nil)
     }
     
+    //MARK: Actions
     @IBAction func startClick(_ sender: UIButton) {
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
             self.horizontalConstraint.constant -= self.view.bounds.height
             self.view.layoutIfNeeded()
         }, completion: { (Bool) -> Void in

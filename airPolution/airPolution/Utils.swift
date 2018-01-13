@@ -29,12 +29,11 @@ let pollutionLevelLabels: [Int:String] = [
 ]
 
 let norms: [String:Double] = [
-    "PM 2.5" : 25,
-    "PM 10"  : 40,
-    "O3"     : 100,
+    "PM 2.5" : 12,
+    "PM 10"  : 20,
+    "O3"     : 70,
     "NO2"    : 40,
     "SO2"    : 50,
-    "CO"     : 2000,
     
     "Particular" : -1
 ]

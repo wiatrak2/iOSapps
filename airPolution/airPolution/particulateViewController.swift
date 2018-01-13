@@ -45,6 +45,8 @@ class particulateViewController: UIViewController {
         }
     }
 
+    //MARK: Actions
+    
     @IBAction func backButton(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
@@ -54,6 +56,9 @@ class particulateViewController: UIViewController {
         guard let whoUrl = URL(string: whoUrlString) else { return }
         UIApplication.shared.open(whoUrl, options: [:], completionHandler: nil)
     }
+    
+    //MARK: Outlets managing
+    
     func initLabels() {
         self.buttonOutlet.layer.cornerRadius = 20
         self.buttonOutlet.setTitleColor(pollutionColor, for: .normal)
